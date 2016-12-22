@@ -1,0 +1,9 @@
+.DS_Store
+*~
+tmp/
+/projects/gothonweb/bin/app.py
+/projects/gothonweb/bin/app.pyc
+/projects/gothonweb/bin/app2.py
+/projects/gothonweb/bin/app2.pyc
+/projects/gothonweb/tests/app_tests.py
+/projects/gothonweb/tests/app_tests.pyc

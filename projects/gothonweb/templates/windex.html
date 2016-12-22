@@ -1,0 +1,7 @@
+$def with (f)
+
+<form name="main" method="post">
+$if not f.valid: <p class="error">Try again:</p>
+$:f.render()
+<!--<input type="submit" />-->
+</form>

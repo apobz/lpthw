@@ -1,0 +1,32 @@
+$def with (room)
+
+$code:
+    r = randint(0, 3)
+
+$if room.name == "death":
+    <h1>Game Over!</h1>
+        <pre>$room.description</pre>
+        <p>
+          <a href="/">Play Again?</a>
+        </p>
+$elif room.name == "gen_death":
+    <h1>You Died!</h1>
+        <pre>$room.description[r]</pre>
+        <p>
+          <a href="/">Play Again?</a>
+        </p>
+$elif room.name == "You Win!":
+    <h1> $room.name </h1>
+        <pre>$room.description</pre>
+        <p>
+          <a href="/">Play Again?</a>
+        </p>
+$else:
+    <h1> $room.name </h1>
+      <pre>$room.description</pre>
+
+    <p>
+      <form action="/game" method="POST">
+          - <input type="text" name="action"> <input type="SUBMIT">
+      </form>
+    </p>

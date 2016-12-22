@@ -1,0 +1,8 @@
+$def with (pic)
+
+$if pic:
+    Here is the image you selected: $pic
+    <br/>
+    <img src=$pic alt="Whoops! There's supposed to be an image here.">
+$else:
+    <em>No image uploaded!</em>
