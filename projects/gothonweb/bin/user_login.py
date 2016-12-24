@@ -1,13 +1,15 @@
-""" Messing around with a simple user login system using web.py
+""" Messing around with a simple user login system using web.py.
+I could have used a database instead, but this is just for fun.
+Maybe that can be added later.
+TODO: Add stupidly simple user authentication
+OPTIONAL: Beautify html pages
 """
-import os.path
+import csv
 from gothonweb import populator as p
+import os.path
 import web
 from web import form
 
-registry = os.path.join(os.path.expanduser('~'), 'learning', 'lcthw', 'lpthw',
-                                'projects', 'gothonweb', 'docs', 'user_db.csv')
-                                
 urls = (
     '/', 'Index',
     '/login', 'Login',
@@ -48,28 +50,36 @@ allowed = (
     ('baz', 'qux')
 )
 
+user_db = os.path.join(os.path.expanduser('~'), 'learning', 'lcthw', 'lpthw',
+                                'projects', 'gothonweb', 'docs', 'user_db.csv')
+if not os.path.isfile(user_db):
+    with open(user_db, 'w') as f:
+        writer = csv.DictWriter(f, fieldnames=['usrnm', 'pw', 'h_score'])
+        writer.writeheader()
+
 
 class Signup:
     def GET(self):
         s = sign()
-        return render.windex(s)
+        return render.windex(s, None)
 
     def POST(self):
         s = sign()
 
-        usrnm = s['Username'].value
-        pw = s['Password'].value
         if s.validates():
-            # take POST data and add to user registry
-            session.logged_in = True
+            # check for duplicate usernames
             vals = {'usrnm': s.d.Username, 'pw': s.d.Password, 'h_score': 0}
-            p.popl(registry, vals)
-            return """<h1>You've signed up!</h1><pre> Welcome %s.
-                </pre><a href="/logout">Logout</a>""" % (s.d.Username)
-            # return "username: %s, password: %s" % (s.d.Username, s.d.Password)
+            is_accepted = p.popl(user_db, vals)
+            # if popl returns False, username is unique
+            if not is_accepted:
+                # take POST data and add to user db
+                session.logged_in = True
+                return """<h1>You've signed up!</h1><pre> Welcome %s.
+                    </pre><a href="/logout">Logout</a>""" % (s.d.Username)
+            else:
+                return render.windex(s, is_accepted)
         else:
-            return render.windex(s)
-            # return "<pre>For some reason you ended up here :/</pre>"
+            return render.windex(s, None)
 
 
 class Index:
@@ -86,13 +96,13 @@ class Index:
 class Login:
     def GET(self):
         f = fbox()
-        return render.windex(f)
+        return render.windex(f, None)
 
     def POST(self):
         f = fbox()
 
         if not f.validates():
-            return render.windex(f)
+            return render.windex(f, None)
 
         usrnm = f['Username'].value
         pw = f['Password'].value

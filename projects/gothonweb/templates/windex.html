@@ -1,7 +1,8 @@
-$def with (f)
+$def with (f, is_accepted)
 
 <form name="main" method="post">
 $if not f.valid: <p class="error">Try again:</p>
+$if is_accepted: <p class="error">Username exists, try again:</p>
 $:f.render()
 <!--<input type="submit" />-->
 </form>
