@@ -69,10 +69,8 @@ class Signup:
         if s.validates():
             # check for duplicate usernames
             vals = {'usrnm': s.d.Username, 'pw': s.d.Password, 'h_score': 0}
-<<<<<<< HEAD
             is_accepted = p.popl(user_db, vals)
             # if popl returns False, username is unique
-=======
             if not is_accepted:
                 # take POST data and add to user db
                 session.logged_in = True
