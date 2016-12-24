@@ -10,5 +10,7 @@ def popl(f_csv, addition):
         if not is_dupl:
             writer = csv.DictWriter(f, fieldnames=fields)
             writer.writerow(addition)
+<<<<<<< HEAD
         # return True if there is a duplicate, False otherwise
+=======
         return is_dupl
