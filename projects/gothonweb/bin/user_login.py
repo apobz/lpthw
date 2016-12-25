@@ -1,10 +1,10 @@
 """ Messing around with a simple user login system using web.py.
-I could have used a database instead, but this is just for fun.
-Maybe that can be added later.
-TODO: Add stupidly simple user authentication
-OPTIONAL: Beautify html pages
+web.py has it's own template for authentication, but I am attempting to do this
+very simply from scratch.
+I could have used a database instead, but this is just for fun. Maybe that can
+be added later.
+Optional Todo: Beautify html pages
 """
-import csv
 from gothonweb import populator as p
 import os.path
 import web
@@ -40,22 +40,10 @@ sign = form.Form(
         }
 )
 
-a = [
-    {'usrnm': 'foo', 'pw': 'bar', 'h_score': 0},
-    {'usrnm': 'baz', 'pw': 'qux', 'h_score': 0},
-]
-
-allowed = (
-    ('foo', 'bar'),
-    ('baz', 'qux')
-)
 
 user_db = os.path.join(os.path.expanduser('~'), 'learning', 'lcthw', 'lpthw',
                                 'projects', 'gothonweb', 'docs', 'user_db.csv')
-if not os.path.isfile(user_db):
-    with open(user_db, 'w') as f:
-        writer = csv.DictWriter(f, fieldnames=['usrnm', 'pw', 'h_score'])
-        writer.writeheader()
+p.create_db(user_db)
 
 
 class Signup:
@@ -90,7 +78,7 @@ class Index:
                 <pre>Proceed to the login page. Or sign up!</pre>
                 <a href='/login'>Login</a>
                 <a href='/signup'>Sign up</a>"""
-        # maybe do this
+        # maybe do this in the game eventually:
         # return render.something() or html text with link to next step: /game
 
 class Login:
@@ -104,11 +92,9 @@ class Login:
         if not f.validates():
             return render.windex(f, None)
 
-        usrnm = f['Username'].value
-        pw = f['Password'].value
-        if (usrnm, pw) in allowed:
+        # authenticate credentials here
+        if p.auth(user_db, f.d.Username, f.d.Password):
             session.logged_in = True
-            # raise web.seeother('/')
             return """<h1>Login success!</h1><pre> Welcome %s.
                 </pre><a href="/logout">Logout</a>""" % (f.d.Username)
             # add a link to the next page (back to index maybe)
