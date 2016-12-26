@@ -12,7 +12,7 @@ def auth(f_csv, usrnm, pw):
 def create_db(path):
     if not os.path.isfile(path):
         with open(path, 'w') as f:
-            writer = csv.DictWriter(f, fieldnames=['usrnm', 'pw', 'h_score'])
+            writer = csv.DictWriter(f, fieldnames=fields)
             writer.writeheader()
 
 def popl(f_csv, addition):

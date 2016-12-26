@@ -37,7 +37,7 @@ sign = form.Form(
     validators = {
         form.Validator("Passwords did not match.",
         lambda i: i.Password == i.password_rep)
-        }
+    }
 )
 
 
@@ -46,7 +46,7 @@ user_db = os.path.join(os.path.expanduser('~'), 'learning', 'lcthw', 'lpthw',
 p.create_db(user_db)
 
 
-class Signup:
+class Signup(object):
     def GET(self):
         s = sign()
         return render.windex(s, None)
@@ -69,8 +69,7 @@ class Signup:
         else:
             return render.windex(s, None)
 
-
-class Index:
+class Index(object):
     # Give user the option to logout, or start the game
     def GET(self):
         if not session.get('logged_in', False):
@@ -81,7 +80,7 @@ class Index:
         # maybe do this in the game eventually:
         # return render.something() or html text with link to next step: /game
 
-class Login:
+class Login(object):
     def GET(self):
         f = fbox()
         return render.windex(f, None)
@@ -102,7 +101,7 @@ class Login:
             session.logged_in = False
             return '<h1>Login failed!</h1><a href="/">Return to Home</a>'
 
-class Logout:
+class Logout(object):
     def GET(self):
         session.logged_in = False
         raise web.seeother('/')
